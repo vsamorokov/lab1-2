@@ -1,6 +1,6 @@
 package ru.nstu.lab1.data;
 
-public class List<T> {
+public class List<T> implements IList<T> {
 
     private Node head;
     private Node tail;
