@@ -1,14 +1,14 @@
 package ru.nstu.lab1;
 
 import ru.nstu.lab1.data.List;
-import ru.nstu.lab1.data.builder.TypeBuilder;
-import ru.nstu.lab1.data.TypeBuilderFactory;
+import ru.nstu.lab1.data.ObjectBuilderFactory;
+import ru.nstu.lab1.data.builder.ObjectBuilder;
 import ru.nstu.lab1.ui.UI;
 
 public class Main {
 
     public static void main(String[] args) {
-        TypeBuilder stringBuilder = TypeBuilderFactory.getBuilder("Integer");
+        ObjectBuilder stringBuilder = ObjectBuilderFactory.getBuilder("Integer");
         new UI();
 
         List<Object> list = new List<>();

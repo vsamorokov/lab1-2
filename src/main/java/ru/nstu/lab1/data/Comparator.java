@@ -1,5 +1,5 @@
 package ru.nstu.lab1.data;
 
-public interface Comparator {
-    int compare(Object o1, Object o2);
+public interface Comparator<T> {
+    int compare(T o1, T o2);
 }

@@ -2,9 +2,9 @@ package ru.nstu.lab1.ui;
 
 public interface ListActionListener {
 
-    void onAdd();
+    void onAdd(String text);
 
-    void onInsert();
+    void onInsert(String text);
 
     void onRemove();
 

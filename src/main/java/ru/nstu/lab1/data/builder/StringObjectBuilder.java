@@ -4,7 +4,7 @@ import ru.nstu.lab1.data.Comparator;
 
 import java.util.Random;
 
-public class StringTypeBuilder implements TypeBuilder {
+public class StringObjectBuilder implements ObjectBuilder {
 
     private static String getString() {
         int leftLimit = 97; // 'a'
@@ -30,7 +30,17 @@ public class StringTypeBuilder implements TypeBuilder {
     }
 
     @Override
-    public Comparator getComparator() {
-        return ((o1, o2) -> ((String) o1).compareTo((String) o2));
+    public String createFromString(String s) {
+        return s;
+    }
+
+    @Override
+    public String toString(Object object) {
+        return object.toString();
+    }
+
+    @Override
+    public Comparator<Object> getComparator() {
+        return (o1, o2) -> ((String) o1).compareTo((String) o2);
     }
 }
