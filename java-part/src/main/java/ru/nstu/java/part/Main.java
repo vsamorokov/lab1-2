@@ -18,23 +18,23 @@ public class Main {
         ListActionListener listActionListener = new ListActionListenerImpl();
         new UI(listActionListener);
 
-        List<Object> list;
-        for (int i = 1; i <= 400; i++) {
-            list = new List<>();
-            for (int j = 0; j < 1000 * i; j++) {
-                list.add(builder.create());
-            }
-            long start = System.nanoTime();
-            try {
-                list.sort((o1, o2) -> (Integer) o1 - (Integer) o2);
-            } catch (StackOverflowError er) {
-                System.err.println("Stack overflow");
-                System.exit(0);
-            }
-            long end = System.nanoTime();
-            System.out.println(end - start);
-//            System.out.printf("%d elements took %f mills\n", 1000 * i, (end - start) * 1.0 / 1000000);
-        }
+//        List<Object> list;
+//        for (int i = 1; i <= 400; i++) {
+//            list = new List<>();
+//            for (int j = 0; j < 1000 * i; j++) {
+//                list.add(builder.create());
+//            }
+//            long start = System.nanoTime();
+//            try {
+//                list.sort((o1, o2) -> (Integer) o1 - (Integer) o2);
+//            } catch (StackOverflowError er) {
+//                System.err.println("Stack overflow");
+//                System.exit(0);
+//            }
+//            long end = System.nanoTime();
+//            System.out.println(end - start);
+////            System.out.printf("%d elements took %f mills\n", 1000 * i, (end - start) * 1.0 / 1000000);
+//        }
 
 
 //        List<Object> list = new List<>();
