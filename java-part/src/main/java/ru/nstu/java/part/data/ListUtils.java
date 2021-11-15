@@ -9,17 +9,16 @@ import java.io.PrintWriter;
 
 public class ListUtils {
 
-    public static <T> void saveToFile(String filename, List<T> list, Builder<T> builder) throws FileNotFoundException {
+    public static <T> void saveToFile(String filename, IList<T> list, Builder<T> builder) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(filename)) {
             writer.println(builder.typeName());
             list.forEach(el -> writer.println(builder.toString(el)));
         }
     }
 
-    public static <T> List<T> loadFromFile(String filename, Builder<T> builder) throws Exception {
+    public static <T> IList<T> loadFromFile(String filename, Builder<T> builder, IList<T> list) throws Exception {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
-            List<T> list = new List<>();
 
             line = br.readLine();
             if (!builder.typeName().equals(line)) {

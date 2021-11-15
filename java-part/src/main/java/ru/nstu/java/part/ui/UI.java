@@ -1,23 +1,15 @@
 package ru.nstu.java.part.ui;
 
-import ru.nstu.java.part.data.ListUtils;
 import ru.nstu.java.part.data.ObjectBuilderFactory;
-import ru.nstu.java.part.data.builder.ObjectBuilder;
-import ru.nstu.java.part.data.List;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileNotFoundException;
 
-public class UI extends JFrame implements ListActionListener {
-    private static final String filename = "file.dat";
+public class UI extends JFrame {
+    private final JList<Object> jList;
 
-    private List<Object> items = new List<>();
-    private final DefaultListModel<Object> listModel = new DefaultListModel<>();
-    private final JList<Object> jList = new JList<>(listModel);
-    private ObjectBuilder builder;
-
-    public UI() throws HeadlessException {
+    public UI(ListActionListener actionListener) throws HeadlessException {
+        this.jList = new JList<>(actionListener.getListModel());
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
 
@@ -36,13 +28,13 @@ public class UI extends JFrame implements ListActionListener {
         comboBox.addActionListener(e -> {
             JComboBox source = (JComboBox) e.getSource();
             String selectedItem = (String) source.getSelectedItem();
-            builder = ObjectBuilderFactory.getBuilder(selectedItem);
-            right.add(new UIAction(this::onAdd, "Add element"));
-            right.add(new UIAction(this::onRemove, "Remove element"));
-            right.add(new UIAction(this::onInsert, "Insert element"));
-            right.add(new UIAction(this::onSort, "Sort"));
-            right.add(new UIAction(this::onSave, "Save"));
-            right.add(new UIAction(this::onLoad, "Load"));
+            actionListener.onSelectType(selectedItem);
+            right.add(new UIAction(actionListener::onAdd, "Add element"));
+            right.add(new UIAction(() -> actionListener.onRemove(jList.getSelectedIndex()), "Remove element"));
+            right.add(new UIAction((text) -> actionListener.onInsert(text, jList.getSelectedIndex()), "Insert element"));
+            right.add(new UIAction(actionListener::onSort, "Sort"));
+            right.add(new UIAction(actionListener::onSave, "Save"));
+            right.add(new UIAction(actionListener::onLoad, "Load"));
             right.remove(chooseType);
             revalidate();
             repaint();
@@ -54,71 +46,4 @@ public class UI extends JFrame implements ListActionListener {
         pack();
         setVisible(true);
     }
-
-
-    @Override
-    public void onAdd(String text) {
-        if (text.isEmpty()) return;
-        Object data = builder.createFromString(text);
-        items.add(data);
-        listModel.addElement(data);
-    }
-
-    @Override
-    public void onInsert(String text) {
-        if (text.isEmpty()) return;
-        Object data = builder.createFromString(text);
-        items.add(data, jList.getSelectedIndex());
-        listModel.add(jList.getSelectedIndex(), data);
-    }
-
-    @Override
-    public void onRemove() {
-        items.remove(jList.getSelectedIndex());
-        listModel.remove(jList.getSelectedIndex());
-    }
-
-    @Override
-    public void onSort() {
-        items.sort(builder.getComparator());
-        listModel.clear();
-        items.forEach(listModel::addElement);
-    }
-
-    @Override
-    public void onSave() {
-        try {
-            ListUtils.saveToFile(filename, items, builder);
-        } catch (FileNotFoundException e) {
-            System.err.println("Unable to write list to a file");
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onLoad() {
-        try {
-            items = ListUtils.loadFromFile(filename, builder);
-            listModel.clear();
-            items.forEach(listModel::addElement);
-        } catch (Exception e) {
-            System.err.println("Unable to read list from a file");
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onSelectType(String type) {
-        try {
-            while (items.size() != 0) {
-                items.remove(0);
-            }
-
-            builder = ObjectBuilderFactory.getBuilder(type);
-
-        } catch (Exception ignored) {
-
-        }
-    }
-
 }

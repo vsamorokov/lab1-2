@@ -7,5 +7,5 @@ public interface IList<T> {
     int size();
     void add(T data, int index);
     void forEach(Action<T> a);
-    void sort(Comparator comparator);
+    void sort(Comparator<T> comparator);
 }

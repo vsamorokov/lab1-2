@@ -1,6 +1,8 @@
 package ru.nstu.scala.part.data
 
-class MyList[T] {
+import ru.nstu.java.part.data.{Action, Comparator, IList}
+
+class MyList[T] extends IList[T]{
 
   private var head: Node = _
   private var tail: Node = _
@@ -68,12 +70,20 @@ class MyList[T] {
     length += 1
   }
 
-  def sort(comparator: (T, T) => Int): Unit = {
+  def forEach(a: Action[T]): Unit = {
+    var tmp = head
+    for (_ <- 0 until length) {
+      a.toDo(tmp.data)
+      tmp = tmp.next
+    }
+  }
+
+  def sort(comparator: Comparator[T]): Unit = {
     head = mergeSort(head, comparator)
     tail = getNode(length - 1)
   }
 
-  private def mergeSort(h: Node, comparator: (T, T) => Int): Node = {
+  private def mergeSort(h: Node, comparator: Comparator[T]): Node = {
     if (h == null || h.next == null) {
       return h
     }
@@ -89,11 +99,11 @@ class MyList[T] {
     sortedMerge(left, right, comparator)
   }
 
-  private def sortedMerge(a: Node, b: Node, comparator: (T, T) => Int): Node = {
+  private def sortedMerge(a: Node, b: Node, comparator: Comparator[T]): Node = {
     var result: Node = null
     if (a == null) return b
     if (b == null) return a
-    if (comparator(a.data, b.data) <= 0) {
+    if (comparator.compare(a.data, b.data) <= 0) {
       result = a
       result.next = sortedMerge(a.next, b, comparator)
     }

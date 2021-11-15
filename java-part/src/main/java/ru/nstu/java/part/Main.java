@@ -3,6 +3,9 @@ package ru.nstu.java.part;
 import ru.nstu.java.part.data.List;
 import ru.nstu.java.part.data.ObjectBuilderFactory;
 import ru.nstu.java.part.data.builder.ObjectBuilder;
+import ru.nstu.java.part.ui.ListActionListener;
+import ru.nstu.java.part.ui.ListActionListenerImpl;
+import ru.nstu.java.part.ui.UI;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -12,7 +15,8 @@ public class Main {
 
     public static void main(String[] args) {
         ObjectBuilder builder = ObjectBuilderFactory.getBuilder("Integer");
-//        new UI();
+        ListActionListener listActionListener = new ListActionListenerImpl();
+        new UI(listActionListener);
 
         List<Object> list;
         for (int i = 1; i <= 400; i++) {
