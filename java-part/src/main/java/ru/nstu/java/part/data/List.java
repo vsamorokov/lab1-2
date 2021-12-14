@@ -28,21 +28,19 @@ public class List<T> implements IList<T> {
         Node tmp = getNode(index);
         if (tmp != head) {
             tmp.prev.next = tmp.next;
-        }
-        else {
+        } else {
             head = tmp.next;
         }
         if (tmp != tail) {
             tmp.next.prev = tmp.prev;
-        }
-        else {
+        } else {
             tail = tmp.prev;
         }
         tmp.next = tmp.prev = null;
         length--;
     }
 
-    public int size(){
+    public int size() {
         return length;
     }
 
@@ -52,8 +50,7 @@ public class List<T> implements IList<T> {
         if (tmp != head) {
             tmp.prev.next = newNode;
             newNode.prev = tmp.prev;
-        }
-        else {
+        } else {
             head = newNode;
         }
         newNode.next = tmp;
@@ -69,13 +66,11 @@ public class List<T> implements IList<T> {
         }
     }
 
-    public void sort(Comparator comparator) {
-        head = mergeSort(head, comparator);
-        tail = getNode(length - 1);
+    public void sort(Comparator<T> comparator) {
+        head = mergeSort(head,comparator);
     }
 
-    private Node mergeSort(Node h, Comparator comparator)
-    {
+    private Node mergeSort(Node h, Comparator<T> comparator) {
         if (h == null || h.next == null) {
             return h;
         }
@@ -89,31 +84,43 @@ public class List<T> implements IList<T> {
 
         Node right = mergeSort(middleNext, comparator);
 
-        return sortedMerge(left, right, comparator);
+        return merge(left, right, comparator);
     }
 
-    private Node sortedMerge(Node a, Node b, Comparator comparator)
-    {
-        Node result;
-        if (a == null)
-            return b;
-        if (b == null)
-            return a;
-
-        if (comparator.compare(a.data, b.data) <= 0) {
-            result = a;
-            result.next = sortedMerge(a.next, b, comparator);
+    private Node merge(Node head11, Node head22, Comparator<T> comparator) {
+        Node left = head11;
+        Node right = head22;
+        Node merged = new Node(null);
+        Node temp = merged;
+        while (left != null && right != null) {
+            if (comparator.compare(left.data, right.data) < 0) {
+                temp.next = left;
+                left.prev = temp;
+                left = left.next;
+            } else {
+                temp.next = right;
+                right.prev = temp;
+                right = right.next;
+            }
+            temp = temp.next;
         }
-        else {
-            result = b;
-            result.next = sortedMerge(a, b.next, comparator);
+        while (left != null) {
+            temp.next = left;
+            left.prev = temp;
+            left = left.next;
+            temp = temp.next;
         }
-        result.next.prev = result;
-        return result;
+        while (right != null) {
+            temp.next = right;
+            right.prev = temp;
+            right = right.next;
+            temp = temp.next;
+            this.tail = temp;
+        }
+        return merged.next;
     }
 
-    private Node getMiddle(Node h)
-    {
+    private Node getMiddle(Node h) {
         if (h == null)
             return null;
         Node fast = h.next;
